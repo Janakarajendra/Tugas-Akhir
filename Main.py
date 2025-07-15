@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import QTimer, Qt
 from PyQt6.QtGui import QFont
 
-# ==== Inisialisasi Sensor ====
+#Inisialisasi Sensor
 sensor = SDS011('/dev/ttyUSB0', use_query_mode=False)
 sensor.sleep(sleep=False)
 time.sleep(1)
@@ -27,7 +27,7 @@ buffer_pm10 = deque(maxlen=5)
 
 last_pm25 = last_pm10 = last_temp = last_hum = None
 
-# ==== Inisialisasi Relay dan Servo ====
+#Inisialisasi pin Relay dan Servo
 RELAYACONOFF = 21
 RELAYMODE = 20
 SERVO_PIN = 2
@@ -47,7 +47,7 @@ humid_mode = False
 filter_state = False
 humidifier_on = False
 
-# === Servo Functions ===
+#buat servo
 def set_servo_angle(angle):
     duty = 2 + (angle / 18)
     GPIO.output(SERVO_PIN, True)
@@ -75,7 +75,7 @@ def toggle_air_filter(pm25):
         print("[STATUS] Air Filter: OFF")
         time.sleep(1)
 
-# === Relay Triggers ===
+# kontrol relay 
 def trigger_relay(pin):
     GPIO.output(pin, GPIO.HIGH)
     time.sleep(0.1)
@@ -150,7 +150,7 @@ def kontrol_humidifier(kelembapan):
         print("[STATUS] Humidifier: OFF")
         time.sleep(1)
 
-def kontrol_fuzzy(suhu, kelembapan, pm25):
+def kontrol_sistem(suhu, kelembapan, pm25):
     pass
 
 def read_sds011():
@@ -306,7 +306,7 @@ class SensorDisplay(QWidget):
         self.hum_bubble.setText(f"{hum}%" if hum is not None else self.hum_bubble.text())
 
         if suhu is not None and hum is not None and pm25 is not None:
-            kontrol_fuzzy(suhu, hum, pm25)
+            kontrol_sistem(suhu, hum, pm25)
             kontrol_ac_dengan_trigger(suhu)
             kontrol_humid_mode(hum, suhu)
             kontrol_humidifier(hum)
